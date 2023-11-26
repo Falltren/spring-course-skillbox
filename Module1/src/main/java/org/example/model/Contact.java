@@ -19,9 +19,6 @@ public class Contact {
         this.email = email;
     }
 
-    public Contact() {
-    }
-
     @Override
     public String toString() {
         return "Contact{" +

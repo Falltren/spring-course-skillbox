@@ -5,8 +5,13 @@ import org.example.model.Contact;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 @Component
 public class ContactService {
@@ -16,13 +21,14 @@ public class ContactService {
     @Getter
     private final Set<Contact> contacts = new HashSet<>();
 
-    private final static String FULL_NAME_FORMAT = "Контакт указывается в формате:\n"
+    private final static String CONTACT_FORMAT = "Контакт указывается в формате:\n"
             + "Иванов Иван Иванович;+89091112233;email@email.com";
     private final static Map<String, String> COMMAND_LIST = Map.of(
             "EXIT", "Завершение приложения",
             "LIST", "Вывод всех контактов",
-            "ADD", "Добавление контакта в список контактов. " + FULL_NAME_FORMAT,
-            "SAVE", "Сохранение контактов из списка контактов в файл"
+            "ADD", "Добавление контакта в список контактов. " + CONTACT_FORMAT,
+            "SAVE", "Сохранение контактов из списка контактов в файл",
+            "DELETE", "Удаление контакта по email"
     );
 
     public void start() {
@@ -35,6 +41,7 @@ public class ContactService {
                 case "LIST" -> printContacts();
                 case "ADD" -> addContact(command[1]);
                 case "SAVE" -> saveContacts();
+                case "DELETE" -> deleteContact(command[1]);
                 case "EXIT" -> {
                     return;
                 }
@@ -57,6 +64,10 @@ public class ContactService {
 
     public void addContact(String inputData) {
         String[] elements = inputData.split(";");
+        if (elements.length != 3) {
+            System.out.println("Ошибка ввода\n" + CONTACT_FORMAT);
+            return;
+        }
         if (!checkFullName(elements[0])) {
             System.out.println("Неверно введено ФИО");
         } else if (!checkPhoneNumber(elements[1])) {
@@ -69,8 +80,17 @@ public class ContactService {
         }
     }
 
+    private void deleteContact(String email) {
+        if (contacts.removeIf(contact -> contact.getEmail().equals(email))) {
+            System.out.println("Контакт удален");
+        } else {
+            System.out.println("Контакт с email " + email + " не найден");
+        }
+
+    }
+
     private void printContacts() {
-        if (contacts.isEmpty()){
+        if (contacts.isEmpty()) {
             System.out.println("Список контактов пуст");
         }
         for (Contact contact : contacts) {
@@ -102,7 +122,7 @@ public class ContactService {
     }
 
     private boolean checkEmail(String email) {
-        return email.matches(".+@.+\\.[a-z]{3,4}");
+        return email.matches(".+@.+\\.[a-z]+");
     }
 
 }
