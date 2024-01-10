@@ -42,7 +42,7 @@ public class StudentService {
         }
     }
 
-    @ShellMethod(key = "clear")
+    @ShellMethod(key = "dall")
     public void clearStorage() {
         storage.clear();
     }
