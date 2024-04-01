@@ -12,4 +12,4 @@ services:
       - POSTGRES_DB=contacts
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-      - .:/var/lib/postgresql/data
+      - ./contacts_data:/var/lib/postgresql/data

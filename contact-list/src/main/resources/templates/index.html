@@ -3,35 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Contact list</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
 </head>
 <body>
-<h1>Contact list</h1>
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-        <th>Phone</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="contact : ${contacts}">
-        <td th:text="${contact.id}"></td>
-        <td th:text="${contact.firstName}"></td>
-        <td th:text="${task.lastName}"></td>
-        <td th:text="${task.email}"></td>
-        <td th:text="${task.phone}"></td>
-        <td>
-            <a th:href="@{/task/edit/{id}(id=${task.id})}">Edit</a>
-            <a th:href="@{/task/delete/{id}(id=${task.id})}">Delete</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<a href="/task/create">Create Task</a>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Contact list</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="contact : ${contacts}">
+                    <td><span th:text="${contact.id}">ID</span></td>
+                    <td><span th:text="${contact.firstName}">Firstname</span></td>
+                    <td><span th:text="${contact.lastName}">Lastname</span></td>
+                    <td><span th:text="${contact.email}">Email</span></td>
+                    <td><span th:text="${contact.phone}">Phone</span></td>
+                    <td>
+                        <div class="button" style="flex-container">
+                            <div><a class="btn btn-warning" th:href="@{/books/create}">Edit</a></div>
+                            <div><a class="btn btn-danger" th:href="@{/books/create}">Delete</a></div>
+                        </div>
+                    </td>
+                    <!--        <td>-->
+                    <!--            <a th:href="@{/task/edit/{id}(id=${task.id})}">Edit</a>-->
+                    <!--            <a th:href="@{/task/delete/{id}(id=${task.id})}">Delete</a>-->
+                    <!--        </td>-->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>
