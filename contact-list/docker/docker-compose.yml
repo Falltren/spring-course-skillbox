@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  psql:
+    container_name: contacts_psql
+    image: postgres:15.4
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=contacts
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - .:/var/lib/postgresql/data
