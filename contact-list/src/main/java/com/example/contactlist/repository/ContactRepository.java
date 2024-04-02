@@ -20,7 +20,7 @@ public class ContactRepository {
     private final JdbcTemplate jdbcTemplate;
 
     public List<Contact> findAll() {
-        String sql = "SELECT * FROM contacts";
+        String sql = "SELECT * FROM contacts ORDER BY id";
         return jdbcTemplate.query(sql, new ContactRowMapper());
     }
 
