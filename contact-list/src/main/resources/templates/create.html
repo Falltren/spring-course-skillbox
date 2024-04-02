@@ -15,6 +15,7 @@
         <div class="col-md-6">
             <a class="btn btn-info" href="#" th:href="@{/api/v1/contacts/}"> Back to all contacts </a>
             <form th:action="${contact.id == null ? '/api/v1/contacts/create' : '/api/v1/contacts/edit'}" method="post">
+                <input type="hidden" name="id" th:value="${contact.id}">
                 &nbsp;
                 <tbody>
                 <div>

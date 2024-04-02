@@ -46,7 +46,7 @@ public class ContactRepository {
         Contact existedContact = findById(contact.getId()).orElse(null);
         if (existedContact != null) {
             String sql = "UPDATE contacts SET first_name = ?, last_name = ?, email = ?, phone = ? WHERE id = ?";
-            jdbcTemplate.update(sql, contact.getFirstName(), contact.getLastName(), contact.getEmail(), contact.getPhone());
+            jdbcTemplate.update(sql, contact.getFirstName(), contact.getLastName(), contact.getEmail(), contact.getPhone(), contact.getId());
             return contact;
         }
         throw new ContactNotFoundException("Contact for update not found! ID: " + contact.getId());
