@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add contact</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Add contact</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <a class="btn btn-info" href="#" th:href="@{/api/v1/contacts/}"> Back to all contacts </a>
+            <form th:action="${contact.id == null ? '/api/v1/contacts/create' : '/api/v1/contacts/edit'}" method="post">
+                &nbsp;
+                <tbody>
+                <div>
+                    <label for="firstName">Firstname:</label>
+                    <input type="text" id="firstname" name="firstName" required th:value="${contact.firstName}">
+                </div>
+                <div>
+                    <label for="lastName">Lastname:</label>
+                    <input type="text" id="lastname" name="lastName" required th:value="${contact.lastName}">
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="text" id="email" name="email" required th:value="${contact.email}">
+                </div>
+                <div>
+                    <label for="phone">Phone:</label>
+                    <input type="text" id="phone" name="phone" required th:value="${contact.phone}">
+                </div>
+                </tbody>
+                <button type="submit" class="btn btn-success">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

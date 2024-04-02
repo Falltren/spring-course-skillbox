@@ -10,6 +10,8 @@ spring:
     hikari:
       schema: contacts_schema
 
-
+app:
+  redirect:
+    baseurl: /api/v1/contacts
 
 

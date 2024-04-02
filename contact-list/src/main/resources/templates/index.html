@@ -7,45 +7,38 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Contact list</h1>
-        </div>
+    <div class="col-sm-8">
+        <h1>Contact list</h1>
     </div>
-    <div class="row">
-        <div class="col-md-6">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="contact : ${contacts}">
-                    <td><span th:text="${contact.id}">ID</span></td>
-                    <td><span th:text="${contact.firstName}">Firstname</span></td>
-                    <td><span th:text="${contact.lastName}">Lastname</span></td>
-                    <td><span th:text="${contact.email}">Email</span></td>
-                    <td><span th:text="${contact.phone}">Phone</span></td>
-                    <td>
-                        <div class="button" style="flex-container">
-                            <div><a class="btn btn-warning" th:href="@{/books/create}">Edit</a></div>
-                            <div><a class="btn btn-danger" th:href="@{/books/create}">Delete</a></div>
-                        </div>
-                    </td>
-                    <!--        <td>-->
-                    <!--            <a th:href="@{/task/edit/{id}(id=${task.id})}">Edit</a>-->
-                    <!--            <a th:href="@{/task/delete/{id}(id=${task.id})}">Delete</a>-->
-                    <!--        </td>-->
-                </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="col-sm-4">
+        <a th:href="@{/api/v1/contacts/create}" class="btn btn-success">Add contact</a>
     </div>
+    <table border="1" cellpadding="10" class="table table-dark table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="contact : ${contacts}">
+            <td><span th:text="${contact.id}">ID</span></td>
+            <td><span th:text="${contact.firstName}">Firstname</span></td>
+            <td><span th:text="${contact.lastName}">Lastname</span></td>
+            <td><span th:text="${contact.email}">Email</span></td>
+            <td><span th:text="${contact.phone}">Phone</span></td>
+            <td>
+                <a class="btn btn-warning" th:href="@{/api/v1/contacts/edit/{id}(id=${contact.id})}">Edit</a>
+                &nbsp;&nbsp;
+                <a class="btn btn-danger" th:href="@{/api/v1/contacts/delete/{id}(id=${contact.id})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 

@@ -25,7 +25,7 @@ public class ContactRepository {
     }
 
     public Optional<Contact> findById(Long id) {
-        String sql = "SELECT * FROM task WHERE id = ?";
+        String sql = "SELECT * FROM contacts WHERE id = ?";
         Contact contact = DataAccessUtils.singleResult(
                 jdbcTemplate.query(
                         sql,
@@ -49,7 +49,7 @@ public class ContactRepository {
             jdbcTemplate.update(sql, contact.getFirstName(), contact.getLastName(), contact.getEmail(), contact.getPhone());
             return contact;
         }
-        throw new ContactNotFoundException("Task for update not found! ID: " + contact.getId());
+        throw new ContactNotFoundException("Contact for update not found! ID: " + contact.getId());
     }
 
     public void deleteById(Long id) {
