@@ -3,7 +3,6 @@ package com.example.contactlist.controller;
 import com.example.contactlist.entity.Contact;
 import com.example.contactlist.service.ContactService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +14,7 @@ public class ContactController {
 
     private final ContactService contactService;
 
-    @Value("${app.redirect.baseurl}")
-    private String baseUrl;
+    private static final String REDIRECT = "redirect:/api/v1/contacts";
 
     @GetMapping()
     public String index(Model model) {
@@ -33,7 +31,7 @@ public class ContactController {
     @PostMapping("/create")
     public String save(@ModelAttribute Contact contact) {
         contactService.save(contact);
-        return "redirect:" + baseUrl;
+        return REDIRECT;
     }
 
     @GetMapping("/edit/{id}")
@@ -46,12 +44,12 @@ public class ContactController {
     @PostMapping("/edit")
     public String edit(@ModelAttribute Contact contact) {
         contactService.update(contact);
-        return "redirect:" + baseUrl;
+        return REDIRECT;
     }
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         contactService.delete(id);
-        return "redirect:" + baseUrl;
+        return REDIRECT;
     }
 }

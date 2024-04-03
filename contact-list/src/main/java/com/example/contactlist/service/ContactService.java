@@ -2,7 +2,7 @@ package com.example.contactlist.service;
 
 import com.example.contactlist.entity.Contact;
 import com.example.contactlist.repository.ContactRepository;
-import com.example.exception.ContactNotFoundException;
+import com.example.contactlist.exception.ContactNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

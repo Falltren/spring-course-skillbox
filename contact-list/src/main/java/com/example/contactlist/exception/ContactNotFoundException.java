@@ -1,4 +1,4 @@
-package com.example.exception;
+package com.example.contactlist.exception;
 
 public class ContactNotFoundException extends RuntimeException {
 

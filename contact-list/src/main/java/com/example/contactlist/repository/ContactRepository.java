@@ -2,7 +2,7 @@ package com.example.contactlist.repository;
 
 import com.example.contactlist.entity.Contact;
 import com.example.contactlist.mapper.ContactRowMapper;
-import com.example.exception.ContactNotFoundException;
+import com.example.contactlist.exception.ContactNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
