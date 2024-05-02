@@ -6,6 +6,7 @@ import com.fallt.news_service.dto.response.OneNewsRs;
 import com.fallt.news_service.dto.response.SomeNewsRs;
 import com.fallt.news_service.exception.BadRequestException;
 import com.fallt.news_service.mapper.NewsMapper;
+import com.fallt.news_service.model.Category;
 import com.fallt.news_service.model.News;
 import com.fallt.news_service.repository.NewsRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,12 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
 
+    private final CategoryService categoryService;
+
     public OneNewsRs create(NewsRq newsRq) {
         News news = newsRepository.save(NewsMapper.INSTANCE.toEntity(newsRq));
+        Category category = categoryService.save(newsRq.getCategory());
+        news.setCategory(category);
         return NewsMapper.INSTANCE.toDto(news);
     }
 
@@ -46,8 +51,11 @@ public class NewsService {
         if (optionalNews.isEmpty()) {
             throw new BadRequestException(MessageFormat.format("Новость с ID: {0} не существует", id));
         }
-        NewsMapper.INSTANCE.updateNewsFromDto(request, optionalNews.get());
-        return NewsMapper.INSTANCE.toDto(optionalNews.get());
+        News news = optionalNews.get();
+        NewsMapper.INSTANCE.updateNewsFromDto(request, news);
+        Category category = categoryService.update(news.getCategory(), request.getCategory());
+        news.setCategory(category);
+        return NewsMapper.INSTANCE.toDto(news);
     }
 
     public void delete(Long id) {

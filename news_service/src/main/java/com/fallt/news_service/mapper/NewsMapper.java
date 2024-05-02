@@ -36,6 +36,7 @@ public interface NewsMapper {
     @Mapping(target = "count", source = "comments", qualifiedByName = "calculateCount")
     SomeNewsRs getCategory(News news);
 
+    @Mapping(target = "category", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateNewsFromDto(UpdateNewsRq request, @MappingTarget News news);
 
