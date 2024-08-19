@@ -37,6 +37,11 @@ public interface NewsMapper {
     SomeNewsRs getCategory(News news);
 
     @Mapping(target = "category", ignore = true)
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createAt", ignore = true)
+    @Mapping(target = "updateAt", ignore = true)
+    @Mapping(target = "user", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateNewsFromDto(UpdateNewsRq request, @MappingTarget News news);
 

@@ -6,13 +6,14 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Setter
 @Getter
+@Table(name = "news")
 public class News {
 
     @Id
@@ -24,10 +25,10 @@ public class News {
     private String text;
 
     @CreationTimestamp
-    private LocalDateTime createAt;
+    private Instant createAt;
 
     @UpdateTimestamp
-    private LocalDateTime updateAt;
+    private Instant updateAt;
 
     @OneToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")

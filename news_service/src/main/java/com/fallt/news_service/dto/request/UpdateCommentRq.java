@@ -5,12 +5,11 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-public class CommentRq {
+public class UpdateCommentRq {
 
-    @NotNull(message = "Поле newsId обязательно должно содержать идентификатор новости")
-    private Long newsId;
+    @NotNull(message = "Поле id обязательно должно содержать идентификатор комментария")
+    private Long id;
 
     @Length(min = 3, max = 500, message = "Количество символов в комментарии должно быть в диапазоне 3-500")
-    private String text;
-
+    private Long text;
 }
