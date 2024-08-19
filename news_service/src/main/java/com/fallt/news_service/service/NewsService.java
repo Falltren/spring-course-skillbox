@@ -2,6 +2,7 @@ package com.fallt.news_service.service;
 
 import com.fallt.news_service.aop.Accessible;
 import com.fallt.news_service.dto.request.CategoryDto;
+import com.fallt.news_service.dto.request.NewsFilter;
 import com.fallt.news_service.dto.request.NewsRq;
 import com.fallt.news_service.dto.request.UpdateNewsRq;
 import com.fallt.news_service.exception.EntityNotFoundException;
@@ -10,6 +11,7 @@ import com.fallt.news_service.model.Category;
 import com.fallt.news_service.model.News;
 import com.fallt.news_service.model.User;
 import com.fallt.news_service.repository.NewsRepository;
+import com.fallt.news_service.repository.NewsSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,11 @@ public class NewsService {
             throw new EntityNotFoundException(MessageFormat.format("Новость с ID: {0} не существует", id));
         }
         return optionalNews.get();
+    }
+
+    public List<News> filterBy(NewsFilter newsFilter) {
+        return newsRepository.findAll(NewsSpecification.withFilter(newsFilter),
+                PageRequest.of(newsFilter.getOffset(), newsFilter.getLimit())).getContent();
     }
 
     @Accessible

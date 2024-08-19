@@ -31,7 +31,7 @@ public class AccessCheckAspect {
 //        HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 //        String userIdFromHeader = request.getHeader("user");
 //        UpdateNewsRq dto = (UpdateNewsRq) joinPoint.getArgs()[0];
-//        Long userIdFromDto = dto.getUserId();
+//        Long userIdFromDto = dto.getId();
 //        if (!userIdFromHeader.equals(userIdFromDto.toString())) {
 //            throw new AccessDeniedException("Вы можете редактировать/удалять только новости, автором которых являетесь вы");
 //        }
@@ -39,7 +39,7 @@ public class AccessCheckAspect {
 //
 //    private String checkArgument(JoinPoint joinPoint) {
 //        Object type = joinPoint.getArgs()[0];
-//        if (type instanceof Integer){
+//        if (type instanceof Integer) {
 //            return type.toString();
 //        } else if (type instanceof UpdateNewsRq updateNewsRq) {
 //            return updateNewsRq.getId().toString();

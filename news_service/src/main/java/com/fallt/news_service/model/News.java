@@ -30,7 +30,7 @@ public class News {
     @UpdateTimestamp
     private Instant updateAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     private Category category;
 

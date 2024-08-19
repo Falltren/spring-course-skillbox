@@ -1,5 +1,6 @@
 package com.fallt.news_service.controller;
 
+import com.fallt.news_service.dto.request.NewsFilter;
 import com.fallt.news_service.dto.request.NewsRq;
 import com.fallt.news_service.dto.request.UpdateNewsRq;
 import com.fallt.news_service.dto.response.OneNewsRs;
@@ -27,6 +28,11 @@ public class NewsController {
     @GetMapping
     public List<SomeNewsRs> getAll(@RequestParam(defaultValue = "0") Integer offset, @RequestParam(defaultValue = "1") Integer limit) {
         return NewsMapper.INSTANCE.toListDto(newsService.getAllNews(offset, limit));
+    }
+
+    @GetMapping("/filter")
+    public List<SomeNewsRs> filterBy(@RequestBody NewsFilter newsFilter) {
+        return NewsMapper.INSTANCE.toListDto(newsService.filterBy(newsFilter));
     }
 
     @GetMapping("/{id}")
