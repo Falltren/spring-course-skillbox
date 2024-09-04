@@ -32,7 +32,7 @@ public class AccessCheckAspect {
         String userIdFromHeader = request.getHeader("user");
         Long userId = getUserIdFromMethodParameters(joinPoint);
         if (!userIdFromHeader.equals(userId.toString())) {
-            throw new AccessDeniedException("Вы можете редактировать/удалять только новости, автором которых являетесь вы");
+            throw new AccessDeniedException("Вы можете редактировать/удалять только новости/комментарии, автором которых являетесь вы");
         }
     }
 
