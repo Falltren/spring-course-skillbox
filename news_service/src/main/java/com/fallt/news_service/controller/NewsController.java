@@ -21,7 +21,7 @@ public class NewsController {
     private final NewsService newsService;
 
     @PostMapping("/create")
-    public OneNewsRs create(@Valid @RequestBody NewsRq newsRq) {
+    public OneNewsRs create(@RequestBody @Valid NewsRq newsRq) {
         return NewsMapper.INSTANCE.toDto(newsService.create(newsRq));
     }
 
