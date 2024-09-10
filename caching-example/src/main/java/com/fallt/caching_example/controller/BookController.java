@@ -24,7 +24,7 @@ public class BookController {
         return bookService.getBooksByCategoryName(categoryName);
     }
 
-    @PostMapping()
+    @PostMapping
     public BookDto createBook(@RequestBody BookDto dto) {
         return bookService.createBook(dto);
     }
@@ -34,7 +34,7 @@ public class BookController {
         return bookService.updateBook(id, dto);
     }
 
-    @DeleteMapping("{/id}")
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         bookService.deleteById(id);
     }

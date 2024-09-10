@@ -1,0 +1,14 @@
+spring:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  datasource:
+    url: jdbc:postgresql://localhost:5432/book_db
+    password: postgres
+    username: postgres
+
+  liquibase:
+    enabled: on
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+
