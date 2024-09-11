@@ -11,4 +11,5 @@ spring:
   liquibase:
     enabled: on
     change-log: classpath:/db/changelog/db.changelog-master.xml
+#    default-schema: my_schema
 
