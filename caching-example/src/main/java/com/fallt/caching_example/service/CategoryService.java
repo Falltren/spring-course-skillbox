@@ -15,10 +15,11 @@ public class CategoryService {
 
     public Category getCategoryByName(String name) {
         Category category;
-        Optional<Category> optionalCategory = categoryRepository.findByName(name);
+        String categoryNameForDb = name.strip().toLowerCase();
+        Optional<Category> optionalCategory = categoryRepository.findByName(categoryNameForDb);
         if (optionalCategory.isEmpty()) {
             Category newCategory = new Category();
-            newCategory.setName(name);
+            newCategory.setName(categoryNameForDb);
             category = categoryRepository.save(newCategory);
         } else {
             category = optionalCategory.get();

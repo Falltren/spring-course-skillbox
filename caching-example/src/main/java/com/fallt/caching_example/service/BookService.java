@@ -9,6 +9,7 @@ import com.fallt.caching_example.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class BookService {
 
     private final CategoryService categoryService;
 
-    @Cacheable(value = "BookService::getByTitleAndAuthor", key = "#title + #author")
+    @Cacheable(value = "titleAndAuthor", key = "#title + #author")
     public BookDto getByTitleAndAuthor(String title, String author) {
         log.info("Вызов метода getByTitleAndAuthor");
         Optional<Book> optionalBook = bookRepository.findByTitleAndAuthor(title, author);
@@ -36,17 +37,25 @@ public class BookService {
         return BookMapper.INSTANCE.toDto(optionalBook.get());
     }
 
-    @Cacheable(value = "BookService::getBooksByCategoryName", key = "#name")
+    @Cacheable(value = "categoryName", key = "#name")
     public List<BookDto> getBooksByCategoryName(String name) {
         log.info("Вызов метода getBooksByCategoryName");
         return BookMapper.INSTANCE.toListDto(bookRepository.findByCategoryName(name));
     }
 
+    public String getCategoryName(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow();
+        return book.getCategory().getName();
+    }
+
+    public String getTitleAndAuthor(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow();
+        return book.getTitle() + book.getAuthor();
+    }
+
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "BookService::getByTitleAndAuthor", allEntries = true),
-            @CacheEvict(value = "BookService::getBooksByCategoryName", allEntries = true)
-    })
+    @CacheEvict(value = "categoryName", key = "#request.category")
+    @CachePut(value = "titleAndAuthor", key = "#request.title + #request.author")
     public BookDto createBook(BookDto request) {
         Category category = categoryService.getCategoryByName(request.getCategory());
         Book book = BookMapper.INSTANCE.toEntity(request);
@@ -55,10 +64,8 @@ public class BookService {
     }
 
     @Transactional
-    @Caching(evict = {
-            @CacheEvict(value = "BookService::getByTitleAndAuthor", allEntries = true),
-            @CacheEvict(value = "BookService::getBooksByCategoryName", allEntries = true)
-    })
+    @CacheEvict(value = "categoryName", key = "#root.target.getCategoryName(#id)")
+    @CachePut(value = "titleAndAuthor", key = "#dto.title + #dto.author")
     public BookDto updateBook(Long id, BookDto dto) {
         Optional<Book> optionalBook = bookRepository.findById(id);
         if (optionalBook.isEmpty()) {
@@ -73,8 +80,8 @@ public class BookService {
     }
 
     @Caching(evict = {
-            @CacheEvict(value = "BookService::getByTitleAndAuthor", allEntries = true),
-            @CacheEvict(value = "BookService::getBooksByCategoryName", allEntries = true)
+            @CacheEvict(value = "titleAndAuthor", key = "#root.target.getTitleAndAuthor(#id)", beforeInvocation = true),
+            @CacheEvict(value = "categoryName", key = "#root.target.getCategoryName(#id)", beforeInvocation = true)
     })
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
