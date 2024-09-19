@@ -1,5 +1,6 @@
 package com.fallt.order_service.kafka;
 
+import com.fallt.order.OrderStatusEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;

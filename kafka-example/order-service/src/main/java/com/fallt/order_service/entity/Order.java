@@ -1,6 +1,6 @@
 package com.fallt.order_service.entity;
 
-import com.fallt.order_service.kafka.OrderEvent;
+import com.fallt.order.OrderEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.fallt.order_service.service;
 
+import com.fallt.order.OrderEvent;
 import com.fallt.order_service.entity.Order;
-import com.fallt.order_service.kafka.OrderEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;

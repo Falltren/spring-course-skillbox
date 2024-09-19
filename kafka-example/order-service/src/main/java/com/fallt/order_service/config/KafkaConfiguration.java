@@ -1,6 +1,7 @@
 package com.fallt.order_service.config;
 
-import com.fallt.order_service.kafka.OrderEvent;
+import com.fallt.order.OrderEvent;
+import com.fallt.order.OrderStatusEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -23,6 +24,9 @@ public class KafkaConfiguration {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
+    @Value("${app.kafka.kafkaMessageGroupId}")
+    private String kafkaMessageGroupId;
+
     @Bean
     public ProducerFactory<String, OrderEvent> kafkaMessageProducerFactory(ObjectMapper objectMapper) {
         Map<String, Object> config = new HashMap<>();
@@ -35,27 +39,28 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, OrderEvent> kafkaTemplate(ProducerFactory<String, OrderEvent> kafkaMessageProducerFactory) {
+    public KafkaTemplate<String, com.fallt.order.OrderEvent> kafkaTemplate(ProducerFactory<String, com.fallt.order.OrderEvent> kafkaMessageProducerFactory) {
         return new KafkaTemplate<>(kafkaMessageProducerFactory);
     }
 
     @Bean
-    public ConsumerFactory<String, OrderEvent> kafkaMessageConsumerFactory(ObjectMapper objectMapper) {
+    public ConsumerFactory<String, OrderStatusEvent> kafkaMessageConsumerFactory(ObjectMapper objectMapper) {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaMessageGroupId);
         config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
 
         return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(), new JsonDeserializer<>(objectMapper));
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, OrderEvent> kafkaMessageConcurrentKafkaListenerContainerFactory(
-            ConsumerFactory<String, OrderEvent> kafkaMessageConsumerFactory
+    public ConcurrentKafkaListenerContainerFactory<String, OrderStatusEvent> kafkaMessageConcurrentKafkaListenerContainerFactory(
+            ConsumerFactory<String, OrderStatusEvent> kafkaMessageConsumerFactory
     ) {
-        ConcurrentKafkaListenerContainerFactory<String, OrderEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        ConcurrentKafkaListenerContainerFactory<String, OrderStatusEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(kafkaMessageConsumerFactory);
         return factory;
     }

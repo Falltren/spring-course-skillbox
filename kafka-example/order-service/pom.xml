@@ -54,6 +54,13 @@
 			<artifactId>spring-kafka-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.fallt</groupId>
+			<artifactId>aorder</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/lib/order-library-1.0-SNAPSHOT.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>

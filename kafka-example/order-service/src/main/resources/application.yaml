@@ -9,4 +9,6 @@ app:
   kafka:
     kafkaOrderTopic: "order-topic"
     kafkaOrderStatusTopic: "order-status-topic"
+    kafkaMessageGroupId: "kafka-message-group-id"
+
 
