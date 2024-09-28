@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class TaskRs implements TaskResponse {
+public class TaskFullRs implements TaskResponse {
 
     private String id;
 

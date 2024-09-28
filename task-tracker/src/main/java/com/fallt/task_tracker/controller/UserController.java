@@ -38,7 +38,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteById(@PathVariable String id) {
-        return userService.deleteById(id);
+    public Mono<Void> deleteUserById(@PathVariable String id) {
+        return userService.deleteUserById(id);
     }
 }

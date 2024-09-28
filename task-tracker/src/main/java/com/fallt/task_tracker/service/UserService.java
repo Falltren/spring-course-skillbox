@@ -48,7 +48,7 @@ public class UserService {
                 });
     }
 
-    public Mono<Void> deleteById(String id) {
+    public Mono<Void> deleteUserById(String id) {
         return userRepository.deleteById(id);
     }
 

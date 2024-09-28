@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bson.BsonType;
-import org.bson.codecs.pojo.annotations.BsonRepresentation;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -34,7 +33,7 @@ public class Task {
     @LastModifiedDate
     private Instant updatedAt;
 
-    @BsonRepresentation(BsonType.STRING)
+    @Field("status")
     private TaskStatus status;
 
     private String authorId;
