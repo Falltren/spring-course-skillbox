@@ -14,7 +14,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-@Document
+@Document(collection = "tasks")
 @Setter
 @Getter
 @AllArgsConstructor
@@ -43,10 +43,10 @@ public class Task {
     private Set<String> observerIds = new HashSet<>();
 
     @ReadOnlyProperty
-    private User user;
+    private User author;
 
     @ReadOnlyProperty
-    private User assigneeUser;
+    private User assignee;
 
     @ReadOnlyProperty
     private Set<User> observers;

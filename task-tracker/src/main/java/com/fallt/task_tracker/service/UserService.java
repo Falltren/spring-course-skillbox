@@ -52,7 +52,7 @@ public class UserService {
         return userRepository.deleteById(id);
     }
 
-    public Flux<User> getUsersBySetId(Set<String> ids){
+    public Flux<User> getUsersBySetId(Set<String> ids) {
         return userRepository.getUsersByIdIn(ids);
 
     }

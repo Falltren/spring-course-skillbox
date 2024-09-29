@@ -33,39 +33,34 @@ public class TaskService {
                 task -> userService.getUsersBySetId(task.getObserverIds())).map(UserMapper.INSTANCE::toDto);
         return existedTask.map(TaskMapper.INSTANCE::toFullDto)
                 .zipWith(author, (task, authorInfo) -> {
-                    task.setAuthorId(authorInfo);
+                    task.setAuthor(authorInfo);
                     return task;
                 })
                 .zipWith(assignee, (task, assigneeInfo) -> {
-                    task.setAssigneeId(assigneeInfo);
+                    task.setAssignee(assigneeInfo);
                     return task;
                 })
                 .zipWith(observers.collectList(), (task, observersList) -> {
-                    task.setObserverIds(new HashSet<>(observersList));
+                    task.setObservers(new HashSet<>(observersList));
                     return task;
                 });
     }
 
     public Flux<TaskResponse> getAllTasks() {
-        return taskRepository.findAll().map(TaskMapper.INSTANCE::toFullDto);
+        return taskRepository.findAll()
+                .flatMap(task -> {
+                    Mono<UserDto> author = userService.getUserById(task.getAuthorId());
+                    Mono<UserDto> assignee = userService.getUserById(task.getAssigneeId());
+                    Flux<UserDto> observers = userService.getUsersBySetId(task.getObserverIds()).map(UserMapper.INSTANCE::toDto);
+                    TaskFullRs taskDto = TaskMapper.INSTANCE.toFullDto(task);
+                    return Mono.zip(Mono.just(task), author, assignee, observers.collectList()).map(t -> {
+                        taskDto.setAuthor(t.getT2());
+                        taskDto.setAssignee(t.getT3());
+                        taskDto.setObservers(new HashSet<>(t.getT4()));
+                        return taskDto;
+                    });
+                });
     }
-
-//    public Flux<TaskResponse> getAllTasks() {
-//        return taskRepository.findAll()
-//                .flatMap(task -> {
-//                    Mono<UserDto> author = userService.getUserById(task.getAuthorId());
-//                    Mono<UserDto> assignee = userService.getUserById(task.getAssigneeId());
-//                    Flux<UserDto> observers = userService.getUsersBySetId(task.getObserverIds()).map(UserMapper.INSTANCE::toDto);
-//
-//                    return Mono.zip(Mono.just(task), author, assignee, observers.collectList()).map(t -> {
-//                        TaskFullRs taskDto = TaskMapper.INSTANCE.toFullDto(task);
-//                        taskDto.setAuthorId(t.getT2());
-//                        taskDto.setAssigneeId(t.getT3());
-//                        taskDto.setObserverIds(new HashSet<>(t.getT4()));
-//                        return taskDto;
-//                    });
-//                });
-//    }
 
     public Mono<TaskResponse> createTask(TaskRq request) {
         return taskRepository.save(TaskMapper.INSTANCE.toEntity(request))

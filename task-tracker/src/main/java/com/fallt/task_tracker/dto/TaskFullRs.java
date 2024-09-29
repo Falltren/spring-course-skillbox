@@ -22,9 +22,9 @@ public class TaskFullRs implements TaskResponse {
 
     private TaskStatus status;
 
-    private UserDto authorId;
+    private UserDto author;
 
-    private UserDto assigneeId;
+    private UserDto assignee;
 
-    private Set<UserDto> observerIds = new HashSet<>();
+    private Set<UserDto> observers = new HashSet<>();
 }
