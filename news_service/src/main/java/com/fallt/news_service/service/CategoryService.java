@@ -1,9 +1,9 @@
 package com.fallt.news_service.service;
 
 import com.fallt.news_service.dto.request.CategoryDto;
+import com.fallt.news_service.entity.Category;
 import com.fallt.news_service.exception.EntityNotFoundException;
 import com.fallt.news_service.mapper.CategoryMapper;
-import com.fallt.news_service.model.Category;
 import com.fallt.news_service.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -29,13 +29,17 @@ public class CategoryService {
         return categoryRepository.save(existedCategory);
     }
 
-    public Category update(CategoryDto categoryDto, Long id) {
-        Category category = getCategoryById(id);
+    public CategoryDto update(CategoryDto categoryDto, Long id) {
+        Category category = getCategory(id);
         CategoryMapper.INSTANCE.updateCategoryFromDto(categoryDto, category);
-        return categoryRepository.save(category);
+        return CategoryMapper.INSTANCE.toDto(categoryRepository.save(category));
     }
 
-    public Category getCategoryById(Long id) {
+    public CategoryDto getCategoryById(Long id){
+        return CategoryMapper.INSTANCE.toDto(getCategory(id));
+    }
+
+    private Category getCategory(Long id) {
         Optional<Category> optionalCategory = categoryRepository.findById(id);
         if (optionalCategory.isEmpty()) {
             throw new EntityNotFoundException(MessageFormat.format("Категория с ID: {0} не существует", id));
@@ -43,11 +47,15 @@ public class CategoryService {
         return optionalCategory.get();
     }
 
-    public List<Category> getAllCategories(Integer offset, Integer limit) {
-        return categoryRepository.findAll(PageRequest.of(offset, limit)).getContent();
+    public List<CategoryDto> getAllCategories(Integer offset, Integer limit) {
+        return CategoryMapper.INSTANCE.toListDto(categoryRepository.findAll(PageRequest.of(offset, limit)).getContent());
     }
 
-    public Category create(CategoryDto categoryDto) {
+    public CategoryDto createCategory(CategoryDto categoryDto) {
+        return CategoryMapper.INSTANCE.toDto(createOrGetExist(categoryDto));
+    }
+
+    public Category createOrGetExist(CategoryDto categoryDto) {
         Optional<Category> optionalCategory = categoryRepository.findByTitle(categoryDto.getTitle());
         if (optionalCategory.isPresent()) {
             return optionalCategory.get();

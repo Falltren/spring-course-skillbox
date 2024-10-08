@@ -1,4 +1,4 @@
-package com.fallt.news_service.model;
+package com.fallt.news_service.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -29,4 +29,8 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "news_id", referencedColumnName = "id")
     private News news;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }

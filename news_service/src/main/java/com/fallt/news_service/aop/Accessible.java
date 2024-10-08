@@ -8,4 +8,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Accessible {
+
+    CheckType checkType() default CheckType.UNKNOWN;
+
+    boolean onlyOwnerAccess() default false;
 }

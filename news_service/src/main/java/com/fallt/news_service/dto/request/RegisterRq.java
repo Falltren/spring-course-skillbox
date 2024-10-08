@@ -1,12 +1,18 @@
 package com.fallt.news_service.dto.request;
 
+import com.fallt.news_service.entity.Role;
 import com.fallt.news_service.validation.Password;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.Set;
+
 @Data
+@Builder
 public class RegisterRq {
 
     @Length(min = 3, max = 20, message = "Длина имени должна составлять от 3 до 20 символов")
@@ -19,7 +25,7 @@ public class RegisterRq {
     @NotBlank(message = "Поле не может быть пустым")
     private String password;
 
-    @NotBlank(message = "Поле не может быть пустым")
-    private String confirmPassword;
+    @NotEmpty(message = "Укажите хотя бы одну роль")
+    private Set<Role> roles;
 
 }

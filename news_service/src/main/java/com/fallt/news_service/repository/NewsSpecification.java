@@ -1,7 +1,7 @@
 package com.fallt.news_service.repository;
 
 import com.fallt.news_service.dto.request.NewsFilter;
-import com.fallt.news_service.model.News;
+import com.fallt.news_service.entity.News;
 import org.springframework.data.jpa.domain.Specification;
 
 public interface NewsSpecification {

@@ -1,5 +1,5 @@
 package com.fallt.news_service.aop;
 
 public enum CheckType {
-    NEWS, COMMENT, UNKNOWN
+    USER, NEWS, COMMENT, UNKNOWN
 }

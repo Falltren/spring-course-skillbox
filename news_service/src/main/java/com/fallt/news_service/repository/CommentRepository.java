@@ -1,6 +1,6 @@
 package com.fallt.news_service.repository;
 
-import com.fallt.news_service.model.Comment;
+import com.fallt.news_service.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

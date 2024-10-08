@@ -1,14 +1,13 @@
 package com.fallt.news_service.dto.request;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
+@Builder
 public class NewsRq {
-
-    @NotNull(message = "Идентификатор пользователя должен быть указан")
-    private Long userId;
 
     @Length(min = 3, max = 50, message = "Заголовок новости должен содержать от 3 до 50 символов")
     private String title;

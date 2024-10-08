@@ -1,6 +1,6 @@
 package com.fallt.news_service.repository;
 
-import com.fallt.news_service.model.Category;
+import com.fallt.news_service.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

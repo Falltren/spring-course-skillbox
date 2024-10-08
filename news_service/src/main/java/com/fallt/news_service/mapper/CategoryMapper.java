@@ -1,11 +1,8 @@
 package com.fallt.news_service.mapper;
 
 import com.fallt.news_service.dto.request.CategoryDto;
-import com.fallt.news_service.model.Category;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import com.fallt.news_service.entity.Category;
+import org.mapstruct.*;
 
 import java.util.List;
 
@@ -18,10 +15,12 @@ public interface CategoryMapper {
 
     CategoryDto toDto(Category category);
 
+    @Mapping(target = "id", ignore = true)
     Category toEntity(CategoryDto categoryDto);
 
     List<CategoryDto> toListDto(List<Category> categories);
 
+    @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateCategoryFromDto(CategoryDto categoryDto, @MappingTarget Category category);
 }

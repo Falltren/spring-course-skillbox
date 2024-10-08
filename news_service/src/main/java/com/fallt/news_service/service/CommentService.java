@@ -2,10 +2,11 @@ package com.fallt.news_service.service;
 
 import com.fallt.news_service.dto.request.CommentRq;
 import com.fallt.news_service.dto.request.UpdateCommentRq;
+import com.fallt.news_service.dto.response.CommentRs;
+import com.fallt.news_service.entity.Comment;
+import com.fallt.news_service.entity.News;
 import com.fallt.news_service.exception.EntityNotFoundException;
 import com.fallt.news_service.mapper.CommentMapper;
-import com.fallt.news_service.model.Comment;
-import com.fallt.news_service.model.News;
 import com.fallt.news_service.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,18 @@ public class CommentService {
 
     private final NewsService newsService;
 
-    public Comment createComment(CommentRq commentRq) {
+    private final UserService userService;
+
+    public CommentRs createComment(CommentRq commentRq) {
         Comment comment = CommentMapper.INSTANCE.toEntity(commentRq);
         News news = newsService.getNews(commentRq.getNewsId());
         comment.setNews(news);
+        comment.setUser(userService.findUser(userService.getIdCurrentUser()));
         commentRepository.save(comment);
-        return comment;
+        return CommentMapper.INSTANCE.toDto(comment);
     }
 
-    public Comment getComment(Long id) {
+    private Comment getComment(Long id) {
         Optional<Comment> optionalComment = commentRepository.findById(id);
         if (optionalComment.isEmpty()) {
             throw new EntityNotFoundException(MessageFormat.format("Комментарий с ID: {0} не существует", id));
@@ -38,14 +42,18 @@ public class CommentService {
         return optionalComment.get();
     }
 
-    public List<Comment> getAllCommentsByNews(Long id) {
-        return commentRepository.getAllByNewsId(id);
+    public CommentRs getCommentById(Long id) {
+        return CommentMapper.INSTANCE.toDto(getComment(id));
     }
 
-    public Comment updateComment(UpdateCommentRq request) {
-        Comment comment = getComment(request.getId());
+    public List<CommentRs> getAllCommentsByNews(Long id) {
+        return CommentMapper.INSTANCE.toListDto(commentRepository.getAllByNewsId(id));
+    }
+
+    public CommentRs updateComment(Long id, UpdateCommentRq request) {
+        Comment comment = getComment(id);
         CommentMapper.INSTANCE.updateCommentFromDto(request, comment);
-        return commentRepository.save(comment);
+        return CommentMapper.INSTANCE.toDto(commentRepository.save(comment));
     }
 
     public void delete(Long id) {

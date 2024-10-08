@@ -9,4 +9,20 @@
         <sqlFile path="sql/schema.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
+    <changeSet id="1703102071112-1" author="fallt">
+        <sqlFile path="sql/add-roles-table.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+    <changeSet id="1703102071113-1" author="fallt">
+        <tagDatabase tag="add-column-user-to-comment-table"/>
+    </changeSet>
+
+    <include file="db.add-column-to-comments.xml" relativeToChangelogFile="true"/>
+    
+    <changeSet id="1703102071114-1" author="fallt">
+        <tagDatabase tag="add-foreign-key-to-comments-table"/>
+    </changeSet>
+
+    <include file="db/changelog/db.add-foreign-key-to-comments.xml"/>
+
 </databaseChangeLog>

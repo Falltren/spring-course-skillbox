@@ -1,4 +1,4 @@
-package com.fallt.news_service.model;
+package com.fallt.news_service.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

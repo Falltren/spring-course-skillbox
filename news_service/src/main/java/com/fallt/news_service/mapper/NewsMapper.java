@@ -2,10 +2,11 @@ package com.fallt.news_service.mapper;
 
 import com.fallt.news_service.dto.request.NewsRq;
 import com.fallt.news_service.dto.request.UpdateNewsRq;
+import com.fallt.news_service.dto.response.CommentRs;
 import com.fallt.news_service.dto.response.OneNewsRs;
 import com.fallt.news_service.dto.response.SomeNewsRs;
-import com.fallt.news_service.model.Comment;
-import com.fallt.news_service.model.News;
+import com.fallt.news_service.entity.Comment;
+import com.fallt.news_service.entity.News;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public interface NewsMapper {
     News toEntity(NewsRq newsRq);
 
     @Mapping(target = "category", expression = "java(news.getCategory().getTitle())")
+    @Mapping(target = "comments", source = "comments", qualifiedByName = "getUserName")
     OneNewsRs toDto(News news);
 
     List<SomeNewsRs> toListDto(List<News> newsList);
@@ -30,6 +32,17 @@ public interface NewsMapper {
     @Named("calculateCount")
     default int calculateCount(List<Comment> comments) {
         return comments.size();
+    }
+
+    @Named("getUserName")
+    default List<CommentRs> getUserName(List<Comment> comments) {
+        return comments.stream()
+                .map(entity -> CommentRs.builder()
+                        .text(entity.getText())
+                        .user(entity.getUser().getName())
+                        .createAt(entity.getCreateAt())
+                        .build()
+                ).toList();
     }
 
     @Mapping(target = "category", source = "category.title")
