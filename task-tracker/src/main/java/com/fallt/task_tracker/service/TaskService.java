@@ -1,9 +1,6 @@
 package com.fallt.task_tracker.service;
 
-import com.fallt.task_tracker.dto.TaskFullRs;
-import com.fallt.task_tracker.dto.TaskResponse;
-import com.fallt.task_tracker.dto.TaskRq;
-import com.fallt.task_tracker.dto.UserDto;
+import com.fallt.task_tracker.dto.*;
 import com.fallt.task_tracker.entity.Task;
 import com.fallt.task_tracker.exception.EntityNotFoundException;
 import com.fallt.task_tracker.mapper.TaskMapper;
@@ -25,33 +22,29 @@ public class TaskService {
 
     private final UserService userService;
 
-    public Mono<TaskResponse> getTaskById(String id) {
-        Mono<Task> existedTask = findTaskById(id);
-        Mono<UserDto> author = existedTask.flatMap(task -> userService.getUserById(task.getAuthorId()));
-        Mono<UserDto> assignee = existedTask.flatMap(task -> userService.getUserById(task.getAssigneeId()));
-        Flux<UserDto> observers = existedTask.flatMapMany(
-                task -> userService.getUsersBySetId(task.getObserverIds())).map(UserMapper.INSTANCE::toDto);
-        return existedTask.map(TaskMapper.INSTANCE::toFullDto)
-                .zipWith(author, (task, authorInfo) -> {
-                    task.setAuthor(authorInfo);
-                    return task;
-                })
-                .zipWith(assignee, (task, assigneeInfo) -> {
-                    task.setAssignee(assigneeInfo);
-                    return task;
-                })
-                .zipWith(observers.collectList(), (task, observersList) -> {
-                    task.setObservers(new HashSet<>(observersList));
-                    return task;
+    public Mono<TaskFullRs> getTaskById(String id) {
+        return findTaskById(id)
+                .flatMap(task -> {
+                    Mono<UserRs> author = userService.getUserById(task.getAuthorId());
+                    Mono<UserRs> assignee = userService.getUserById(task.getAssigneeId());
+                    Flux<UserRs> observers = userService.getUsersBySetId(task.getObserverIds()).map(UserMapper.INSTANCE::toDto);
+                    TaskFullRs taskDto = TaskMapper.INSTANCE.toFullDto(task);
+                    return Mono.zip(Mono.just(task), author, assignee, observers.collectList()).map(t -> {
+                        taskDto.setAuthor(t.getT2());
+                        taskDto.setAssignee(t.getT3());
+                        taskDto.setObservers(new HashSet<>(t.getT4()));
+                        return taskDto;
+                    });
                 });
+
     }
 
-    public Flux<TaskResponse> getAllTasks() {
+    public Flux<TaskFullRs> getAllTasks() {
         return taskRepository.findAll()
                 .flatMap(task -> {
-                    Mono<UserDto> author = userService.getUserById(task.getAuthorId());
-                    Mono<UserDto> assignee = userService.getUserById(task.getAssigneeId());
-                    Flux<UserDto> observers = userService.getUsersBySetId(task.getObserverIds()).map(UserMapper.INSTANCE::toDto);
+                    Mono<UserRs> author = userService.getUserById(task.getAuthorId());
+                    Mono<UserRs> assignee = userService.getUserById(task.getAssigneeId());
+                    Flux<UserRs> observers = userService.getUsersBySetId(task.getObserverIds()).map(UserMapper.INSTANCE::toDto);
                     TaskFullRs taskDto = TaskMapper.INSTANCE.toFullDto(task);
                     return Mono.zip(Mono.just(task), author, assignee, observers.collectList()).map(t -> {
                         taskDto.setAuthor(t.getT2());
@@ -62,12 +55,17 @@ public class TaskService {
                 });
     }
 
-    public Mono<TaskResponse> createTask(TaskRq request) {
-        return taskRepository.save(TaskMapper.INSTANCE.toEntity(request))
-                .map(TaskMapper.INSTANCE::toSimpleDto);
+    public Mono<TaskSimpleRs> createTask(TaskRq request) {
+        Mono<String> userId = userService.getCurrentUserId();
+        return userId.flatMap(currentUserId -> {
+            Task task = TaskMapper.INSTANCE.toEntity(request);
+            task.setAuthorId(currentUserId);
+            return taskRepository.save(task)
+                    .map(TaskMapper.INSTANCE::toSimpleDto);
+        });
     }
 
-    public Mono<TaskResponse> updateTask(String id, TaskRq request) {
+    public Mono<TaskSimpleRs> updateTask(String id, TaskRq request) {
         return findTaskById(id)
                 .flatMap(existedTask -> {
                     TaskMapper.INSTANCE.updateTaskFromDto(request, existedTask);

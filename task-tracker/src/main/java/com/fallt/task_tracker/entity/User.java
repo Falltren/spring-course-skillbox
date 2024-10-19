@@ -6,6 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Document(collection = "users")
 @Setter
@@ -20,4 +24,9 @@ public class User {
     private String username;
 
     private String email;
+
+    private String password;
+
+    @Field("roles")
+    private Set<RoleType> roles = new HashSet<>();
 }

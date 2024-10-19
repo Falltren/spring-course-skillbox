@@ -18,6 +18,7 @@ public interface TaskMapper {
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "observers", ignore = true)
     @Mapping(target = "assignee", ignore = true)
+    @Mapping(target = "authorId", ignore = true)
     @Mapping(target = "id", ignore = true)
     Task toEntity(TaskRq request);
 
@@ -31,6 +32,7 @@ public interface TaskMapper {
     @Mapping(target = "author", ignore = true)
     @Mapping(target = "observers", ignore = true)
     @Mapping(target = "assignee", ignore = true)
+    @Mapping(target = "authorId", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateTaskFromDto(TaskRq request, @MappingTarget Task task);
 

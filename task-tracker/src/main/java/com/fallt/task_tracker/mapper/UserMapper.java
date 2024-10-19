@@ -1,8 +1,11 @@
 package com.fallt.task_tracker.mapper;
 
-import com.fallt.task_tracker.dto.UserDto;
+import com.fallt.task_tracker.dto.UserRq;
+import com.fallt.task_tracker.dto.UserRs;
 import com.fallt.task_tracker.entity.User;
 import org.mapstruct.*;
+
+import java.util.List;
 
 import static org.mapstruct.factory.Mappers.getMapper;
 
@@ -11,12 +14,17 @@ public interface UserMapper {
 
     UserMapper INSTANCE = getMapper(UserMapper.class);
 
-    UserDto toDto(User user);
+    UserRs toDto(User user);
+
+    List<UserRs> toListDto(List<User> users);
 
     @Mapping(target = "id", ignore = true)
-    User toEntity(UserDto dto);
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "roles", ignore = true)
+    User toEntity(UserRq dto);
 
+    @Mapping(target = "roles", ignore = true)
     @Mapping(target = "id", ignore = true)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateUserFromDto(UserDto request, @MappingTarget User user);
+    void updateUserFromDto(UserRq request, @MappingTarget User user);
 }
